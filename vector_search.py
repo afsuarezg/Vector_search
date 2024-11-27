@@ -3,7 +3,9 @@ import sys
 import torch
 from transformers import AutoTokenizer, AutoModel
 
+sys.path.append(r"C:\Users\Andres.DESKTOP-D77KM25\OneDrive - Stanford\Laboral\Lawgorithm\Repos\3.Embedding")
 
+from embedding import download_blob_content
 
 
 
