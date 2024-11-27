@@ -9,6 +9,8 @@ from embedding import download_blob_content
 
 
 
+
+
 def embedd_query(text, huggingface_model):
     """
     Embedd the query using Huggingface models.
@@ -95,6 +97,12 @@ def create_prompt(top_k_texts):
 
 
 if __name__ == '__main__':
-     pass
+    query = get_user_query()
+    query_embedding = embedd_user_query()
+    similarity = calculate_similarity(query_embedding, database)
+    retrived_sources = retrieve_top_k(database, similarities, k=5)
+    prompt = create_prompt(retrieved_sources)
+
+
 
 
