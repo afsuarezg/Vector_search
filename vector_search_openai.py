@@ -14,6 +14,7 @@ sys.path.append(r"C:\Users\Andres.DESKTOP-D77KM25\OneDrive - Stanford\Laboral\La
 from openai_functions import get_embedding
 from embedding import download_blob_content
 
+
 #load the .env file
 load_dotenv()
 
@@ -99,8 +100,8 @@ def get_contents_from_indices(data, indices_list):
     for indices in indices_list:
         current_sources = []
         for index in indices:
-        current_sources.append(data.iloc[index]['sentencia'])  # Replace 'text' with your desired column name
-        contents.append(current_sources)
+            current_sources.append(data.iloc[index]['sentencia'])  # Replace 'text' with your desired column name
+            contents.append(current_sources)
     return contents
 
 
@@ -120,27 +121,7 @@ def create_prompt(retrieved_sources):
 
 
 def main1():
-    # Mock embedding model and database
-    def mock_embedding_model(text):
-        # Simple example, returns an array of word lengths for demonstration
-        return np.array([len(word) for word in text.split()])
-
-    database = ["This is the first document.", 
-                "Here is another relevant source.", 
-                "A third document with relevant content.",
-                "More information in this entry.",
-                "Final document in the database."]
-    
-    database_embeddings = np.array([mock_embedding_model(doc) for doc in database])
-
-    # Pipeline
-    query = get_user_query()
-    query_embedding = embed_user_query(query, mock_embedding_model)
-    similarity = calculate_similarity(query_embedding, database_embeddings)
-    retrieved_sources = retrieve_top_k(database, similarity, k=5)
-    prompt = create_prompt(retrieved_sources)
-
-    print(prompt)
+    pass
     
 
 def main2():
