@@ -7,6 +7,8 @@ import sys
 from dotenv import load_dotenv
 import numpy as np
 from openai import OpenAI
+import pandas as pd
+from sklearn.metrics.pairwise import cosine_similarity
 import torch
 
 #own packages
@@ -119,24 +121,32 @@ def create_prompt(retrieved_sources):
 
 
 def main1():
-    pass
-    
+    query_embedding = get_embedding(get_user_query(), model="text-embedding-3-large")
 
-def main2():
-    # query = get_user_query()
-    # query = get_embedding(query)
-    # print('query: ', query)
-
-    # database = download_blob_content(account_url="https://lawgorithm.blob.core.windows.net", 
-    #                     container_name='jurisprudencia-chunked-text', 
-    #                     blob_name='jurisprudencia_2023.json')
     database =  download_blob_content(account_url="https://lawgorithm.blob.core.windows.net", 
-                          container_name='jurisprudencia-embeddings', 
-                          blob_name='jurisprudencia-embeddings-2023.json')
-    print(type(database))
-    
+                            container_name='jurisprudencia-embeddings', 
+                            blob_name='jurisprudencia-embeddings_openai_large-2023.json')
+
+    # Convert the bytes object to a string
+    database_str = database.decode('utf-8')
+
+    # Load the string as a list of dictionaries
+    database_list = json.loads(database_str)
+
+    # Convert the list of dictionaries to a pandas dataframe
+    database = pd.DataFrame(database_list)
 
 
-# Example usage
+
+    database = database.iloc[[i for i,elem in enumerate(database['embedding'].to_list()) if elem != [None]]]
+
+    similarities = torch.from_numpy(cosine_similarity([query_embedding], database['embedding'].to_list(), dense_output=True))
+
+    sources=  get_contents_from_indices(selected_sources,  get_top_k_indices(similarities, 6), 'text')
+
+    prompt = create_prompt(sources)
+    print(prompt)   
+
+
 if __name__ == "__main__":
-    main2()
+    main1()
