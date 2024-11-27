@@ -84,7 +84,7 @@ def get_top_k_indices(tensor, k):
     return top_k_indices
 
 
-def get_contents_from_indices(data, indices_list):
+def get_contents_from_indices(data, indices_list, column):
     """
     Returns the contents in the given indices from a column in a pandas DataFrame.
 
@@ -98,10 +98,8 @@ def get_contents_from_indices(data, indices_list):
     """
     contents = []
     for indices in indices_list:
-        current_sources = []
         for index in indices:
-            current_sources.append(data.iloc[index]['sentencia'])  # Replace 'text' with your desired column name
-            contents.append(current_sources)
+            contents.append(data.iloc[index][column])  # Replace 'text' with your desired column name
     return contents
 
 
@@ -117,7 +115,7 @@ def create_prompt(retrieved_sources):
         str: A concatenated string that forms the prompt.
     """
     prompt = "\n\n".join(retrieved_sources)
-    return f"Relevant sources for your query:\n\n{prompt}"
+    return f"Las fuentes legales relevantes para su consulta son:\n\n{prompt}"
 
 
 def main1():
