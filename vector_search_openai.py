@@ -7,6 +7,7 @@ import sys
 from dotenv import load_dotenv
 import numpy as np
 from openai import OpenAI
+import torch
 
 #own packages
 sys.path.append(r"C:\Users\Andres.DESKTOP-D77KM25\OneDrive - Stanford\Laboral\Lawgorithm\Repos\3.Embedding")
@@ -66,6 +67,43 @@ def retrieve_top_k(database, similarities, k=5):
     return [database[i] for i in top_k_indices]
 
 
+def get_top_k_indices(tensor, k):
+    """
+    Returns the indices of the k elements with the higher values in a tensor.
+
+    Args:
+        tensor: The input tensor.
+        k: The number of top elements to return.
+
+    Returns:
+        A list of indices of the top k elements.
+    """
+    # Get the indices of the top k elements
+    top_k_indices = torch.topk(tensor, k).indices.tolist()
+    return top_k_indices
+
+
+def get_contents_from_indices(data, indices_list):
+    """
+    Returns the contents in the given indices from a column in a pandas DataFrame.
+
+    Args:
+        data: The pandas DataFrame.
+        indices_list: A list of indices.
+        column_name: The name of the column to retrieve contents from.
+
+    Returns:
+        A list of contents corresponding to the given indices.
+    """
+    contents = []
+    for indices in indices_list:
+        current_sources = []
+        for index in indices:
+        current_sources.append(data.iloc[index]['sentencia'])  # Replace 'text' with your desired column name
+        contents.append(current_sources)
+    return contents
+
+
 # Step 5: Create prompt
 def create_prompt(retrieved_sources):
     """
@@ -106,15 +144,20 @@ def main1():
     
 
 def main2():
-    query = get_user_query()
-    query = get_embedding(query)
-    database =  download_blob_content()
+    # query = get_user_query()
+    # query = get_embedding(query)
+    # print('query: ', query)
 
-
-
-
+    # database = download_blob_content(account_url="https://lawgorithm.blob.core.windows.net", 
+    #                     container_name='jurisprudencia-chunked-text', 
+    #                     blob_name='jurisprudencia_2023.json')
+    database =  download_blob_content(account_url="https://lawgorithm.blob.core.windows.net", 
+                          container_name='jurisprudencia-embeddings', 
+                          blob_name='jurisprudencia-embeddings-2023.json')
+    print(type(database))
+    
 
 
 # Example usage
 if __name__ == "__main__":
-    main1()
+    main2()
