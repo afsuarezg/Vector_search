@@ -8,9 +8,6 @@ sys.path.append(r"C:\Users\Andres.DESKTOP-D77KM25\OneDrive - Stanford\Laboral\La
 from embedding import download_blob_content
 
 
-
-
-
 def embedd_query(text, huggingface_model):
     """
     Embedd the query using Huggingface models.
