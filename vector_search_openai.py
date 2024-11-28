@@ -121,11 +121,11 @@ def create_prompt(retrieved_sources):
 
 
 def main1():
-    query_embedding = get_embedding(get_user_query(), model="text-embedding-3-large")
+    query_embedding = get_embedding(get_user_query())
 
     database =  download_blob_content(account_url="https://lawgorithm.blob.core.windows.net", 
                             container_name='jurisprudencia-embeddings', 
-                            blob_name='jurisprudencia-embeddings_openai_large-2023.json')
+                            blob_name='jurisprudencia-embeddings-2023.json')
 
     # Convert the bytes object to a string
     database_str = database.decode('utf-8')
@@ -142,7 +142,7 @@ def main1():
 
     similarities = torch.from_numpy(cosine_similarity([query_embedding], database['embedding'].to_list(), dense_output=True))
 
-    sources=  get_contents_from_indices(selected_sources,  get_top_k_indices(similarities, 6), 'text')
+    sources=  get_contents_from_indices(database,  get_top_k_indices(similarities, 6), 'text')
 
     prompt = create_prompt(sources)
     print(prompt)   
