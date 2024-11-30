@@ -136,8 +136,6 @@ def main1():
     # Convert the list of dictionaries to a pandas dataframe
     database = pd.DataFrame(database_list)
 
-
-
     database = database.iloc[[i for i,elem in enumerate(database['embedding'].to_list()) if elem != [None]]]
 
     similarities = torch.from_numpy(cosine_similarity([query_embedding], database['embedding'].to_list(), dense_output=True))
